@@ -67,7 +67,11 @@ void dealloc(Node* head)
 //   function object struct declarations
 // -----------------------------------------------
 
-
+struct delO{
+    bool operator()(int value) const{
+        return value % 2 != 0;
+    }
+};
 
 
 
@@ -85,11 +89,35 @@ int main(int argc, char* argv[])
     cout << "Original list: ";
     print(head);
 
+    Node* small;
+    Node* large;
+
+    llpivot(head, small, large, 8);
+
+    cout << "Post pivot sub 1 (less than or equal to): ";
+    print(small);
+
+    cout << "Post pivot sub 2 (greater): ";
+    print(large);
+
+    cout << "OG head NULL: " << (head == NULL) << endl;
+
+    small = llfilter(small, delO());
+    large = llfilter(large, delO());
+
+    cout << "FSmall (even values): ";
+    print(small);
+
+    cout << "FLarge (even values): ";
+    print(large);
+
+    dealloc(small);
+    dealloc(large);
+
+    return 0;
+
     // Test out your linked list code
 
-
-
-    
     return 0;
 
 }

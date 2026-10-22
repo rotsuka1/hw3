@@ -61,52 +61,102 @@ public:
 
 private:
   /// Add whatever helper functions and data members you need below
-
-
-
-
+  int med;
+  PComparator compare;
+  std::vector<T> vec;
 };
 
 // Add implementation of member functions here
 
-
-// We will start top() for you to handle the case of 
-// calling top on an empty heap
 template <typename T, typename PComparator>
-T const & Heap<T,PComparator>::top() const
+Heap<T, PComparator>::Heap(int m, PComparator c) : med(m), compare(c)
 {
-  // Here we use exceptions to handle the case of trying
-  // to access the top element of an empty heap
-  if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-
-
+  if(m<2){
+    throw std::invalid_argument("Heap arity must be at least 2");
   }
-  // If we get here we know the heap has at least 1 item
-  // Add code to return the top element
-
-
-
 }
 
-
-// We will start pop() for you to handle the case of 
-// calling top on an empty heap
 template <typename T, typename PComparator>
-void Heap<T,PComparator>::pop()
+Heap<T, PComparator>::~Heap() {}
+
+template <typename T, typename PComparator>
+void Heap<T, PComparator>::push(const T& item)
+{
+  vec.push_back(item);
+  size_t i = vec.size() - 1;
+
+  while(i>0){
+    size_t parent = (i-1) / static_cast<size_t>(med);
+
+    if(!compare(vec[i], vec[parent])){
+      break;
+    }
+
+    std::swap(vec[i], vec[parent]);
+    i = parent;
+  }
+}
+
+template <typename T, typename PComparator>
+const T& Heap<T, PComparator>::top() const
 {
   if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-
-
+    throw std::underflow_error("Cannot access the top of an empty heap");
   }
 
+  return vec[0];
+}
 
+template <typename T, typename PComparator>
+void Heap<T, PComparator>::pop()
+{
+  if(empty()){
+    throw std::underflow_error("Cannot pop an empty heap");
+  }
 
+  std::swap(vec.front(), vec.back());
+  vec.pop_back();
+
+  size_t i = 0;
+
+  while(i < vec.size()){
+    size_t best = i;
+
+    for(int child = 1; child <= med; ++child){
+      if(i > (vec.size() - 1) / static_cast<size_t>(med)){
+        break;
+      }
+
+      size_t child_index = static_cast<size_t>(med) * i + static_cast<size_t>(child);
+      
+      if(child_index >= vec.size()){
+        break;
+      }
+
+      if(compare(vec[child_index], vec[best])){
+        best = child_index;
+      }
+    }
+
+    if(best == i){
+      break;
+    }
+
+    std::swap(vec[i], vec[best]);
+    i = best;
+  }
+}
+
+template <typename T, typename PComparator>
+bool Heap<T, PComparator>::empty() const
+{
+    return vec.empty();
+}
+
+template <typename T, typename PComparator>
+size_t Heap<T, PComparator>::size() const
+{
+    return vec.size();
 }
 
 
