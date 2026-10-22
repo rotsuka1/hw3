@@ -1,7 +1,11 @@
 #ifndef HEAP_H
 #define HEAP_H
+
 #include <functional>
 #include <stdexcept>
+#include <vector>
+#include <utility>
+#include <cstddef>
 
 template <typename T, typename PComparator = std::less<T> >
 class Heap

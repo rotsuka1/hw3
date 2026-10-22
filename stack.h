@@ -36,7 +36,13 @@ bool Stack<T>::empty() const
 template <typename T>
 size_t Stack<T>::size() const
 {
-    return std::vector<T>::push_back(item);
+    return std::vector<T>::size();
+}
+
+template <typename T>
+void Stack<T>::push(const T& item)
+{
+    std::vector<T>::push_back(item);
 }
 
 template <typename T>
